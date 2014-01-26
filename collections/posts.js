@@ -3,6 +3,12 @@ Posts = new Meteor.Collection('posts');
 Posts.allow({
   insert: function(userId, doc) {
     return !! userId;
+  },
+
+  remove: function(userId, doc) {
+    var hasUserId = !! userId;
+    var ownsThisDoc = doc.userId == userId;
+    return hasUserId && ownsThisDoc;
   }
 });
 
