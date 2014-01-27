@@ -1,14 +1,13 @@
 Posts = new Meteor.Collection('posts');
 
 Posts.allow({
-  insert: function(userId, doc) {
-    return !! userId;
-  },
+  update: ownsDocument,
+  remove: ownsDocument
+});
 
-  remove: function(userId, doc) {
-    var hasUserId = !! userId;
-    var ownsThisDoc = doc.userId == userId;
-    return hasUserId && ownsThisDoc;
+Posts.deny({
+  update: function(userId, post, fieldNames){
+    return (_.without(fieldNames, 'url', 'title').length > 0);
   }
 });
 
